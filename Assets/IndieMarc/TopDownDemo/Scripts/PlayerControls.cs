@@ -17,7 +17,6 @@ namespace IndieMarc.TopDown
         public KeyCode right_key;
         public KeyCode up_key;
         public KeyCode down_key;
-        public KeyCode action_key;
 
         private Vector2 move = Vector2.zero;
         private bool action_press = false;
@@ -50,10 +49,6 @@ namespace IndieMarc.TopDown
                 move += Vector2.up;
             if (Input.GetKey(down_key))
                 move += -Vector2.up;
-            if (Input.GetKey(action_key))
-                action_hold = true;
-            if (Input.GetKeyDown(action_key))
-                action_press = true;
 
             float move_length = Mathf.Min(move.magnitude, 1f);
             move = move.normalized * move_length;

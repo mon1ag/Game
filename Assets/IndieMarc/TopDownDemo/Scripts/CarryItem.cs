@@ -84,13 +84,6 @@ namespace IndieMarc.TopDown
 
             if (over_obstacle_count > 0f)
                 over_obstacle_count -= Time.deltaTime;
-
-            if (!bearer && !throwing)
-            {
-                //Called from bearer to sync when has bearer, otherwise called here
-                UpdateCarryItem();
-            }
-
             //Destroyed
             if (reset_on_death && !sprite_render.enabled)
             {
@@ -101,48 +94,6 @@ namespace IndieMarc.TopDown
                 }
             }
             
-        }
-        
-        public void UpdateCarryItem()
-        {
-            AdaptOrderInLayer();
-            UpdatePosition();
-        }
-
-        private void UpdatePosition()
-        {
-            target_pos = transform.position;
-            float target_angle = 0f;
-            target_rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, target_angle);
-
-            if (bearer)
-            {
-                Vector3 motion = bearer.GetMove();
-                if (bearer)
-                {
-                    if (motion.magnitude > 0.1f)
-                    {
-                        last_motion = motion;
-                    }
-                }
-                
-                //Update position of the item
-                flipX = bearer.GetCharacter().GetSide();
-                GameObject hand = bearer.hand.gameObject;
-                target_pos = hand.transform.position + hand.transform.up * carry_offset.y + hand.transform.right * carry_offset.x * flipX;
-                Vector3 rot_vector_forw = Quaternion.Euler(0f, 0f, carry_angle_deg * flipX) * hand.transform.forward;
-                Vector3 rot_vector_up = Quaternion.Euler(0f, 0f, carry_angle_deg * flipX) * hand.transform.up;
-                target_rotation = Quaternion.LookRotation(rot_vector_forw, rot_vector_up);
-            }
-
-            //Move the object
-            transform.position = target_pos;
-            transform.rotation = target_rotation;
-
-            //Flip
-            transform.localScale = bearer || throwing ? start_size * carry_size : start_size;
-            transform.localScale = new Vector3(Mathf.Abs(transform.localScale.x) * flipX, transform.localScale.y, transform.localScale.z);
-
         }
 
         private void AdaptOrderInLayer()
@@ -191,8 +142,6 @@ namespace IndieMarc.TopDown
             {
                 OnTake.Invoke(bearer.gameObject);
             }
-
-            UpdateCarryItem();
         }
 
         public void Drop()

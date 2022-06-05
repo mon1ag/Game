@@ -1,21 +1,26 @@
+using IndieMarc.TopDown;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public interface IAttack
+public interface IItemActions
 {
-    void Attack();
+    void MainAction();
 }
 
-public class Weapon : MonoBehaviour, IAttack
+public class Weapon : MonoBehaviour, IItemActions
 {
+    public Transform DamageParentPoint;
+
     bool IsReloading = false;
-    int AllCharges = 5;
-    int CurrentCharges = 5;
-    int ClipSize = 5;
-    int AttackCost = 1;
+    public float AllCharges = 5;
+    public float MaxCharges = 5;
+    public float CurrentCharges = 5;
+    public float ClipSize = 5;
+    public float AttackCost = 1;
     public GameObject DamageDealer;
 
+    public CharacterHoldItem Hands;
     // Start is called before the first frame update
     void Start()
     {
@@ -25,22 +30,25 @@ public class Weapon : MonoBehaviour, IAttack
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     bool TryAttack()
     {
-        if (AllCharges < AttackCost || IsReloading)
+        if (CurrentCharges < AttackCost || IsReloading)
             return false;
+        Attack();
         return true;
     }
 
     void Attack()
     {
-        if (CurrentCharges > AttackCost)
+        Debug.Log("Attack");
+        if (CurrentCharges >= AttackCost)
         {
-            Instantiate(DamageDealer);
+            Instantiate(DamageDealer, DamageParentPoint.position, DamageParentPoint.rotation);
             CurrentCharges -= AttackCost;
+            Hands.UpdateWeaponUIDelegate.Invoke();
         }
         if(CurrentCharges<AttackCost)
         {
@@ -52,7 +60,7 @@ public class Weapon : MonoBehaviour, IAttack
     {
         if(AllCharges > 0)
         {
-            int ReloadingCount = ClipSize - CurrentCharges;
+            float ReloadingCount = ClipSize - CurrentCharges;
             if (AllCharges < ClipSize)
             {
                 if (AllCharges < ReloadingCount)
@@ -63,7 +71,7 @@ public class Weapon : MonoBehaviour, IAttack
         }
     }
 
-    void IAttack.Attack()
+    void IItemActions.MainAction()
     {
         TryAttack();
     }

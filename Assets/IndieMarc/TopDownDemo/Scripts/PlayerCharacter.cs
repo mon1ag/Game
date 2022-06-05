@@ -31,6 +31,7 @@ namespace IndieMarc.TopDown
         private Rigidbody2D rigid;
         private Animator animator;
         private AutoOrderLayer auto_order;
+        CharacterHoldItem Hands;
         private ContactFilter2D contact_filter;
 
         private float hp;
@@ -50,6 +51,7 @@ namespace IndieMarc.TopDown
             rigid = GetComponent<Rigidbody2D>();
             animator = GetComponent<Animator>();
             auto_order = GetComponent<AutoOrderLayer>();
+            Hands = GetComponent<CharacterHoldItem>();
             hp = max_hp;
         }
 
@@ -220,6 +222,15 @@ namespace IndieMarc.TopDown
             PlayerCharacter[] list = new PlayerCharacter[character_list.Count];
             character_list.Values.CopyTo(list, 0);
             return list;
+        }
+
+        void OnTriggerEnter2D(Collider2D col)
+        {
+            Debug.Log("Collider");
+            if(col.gameObject.GetComponent<CarryItem>())
+            {
+                Hands.TakeItem(col.gameObject.GetComponent<CarryItem>());
+            }
         }
     }
 }
