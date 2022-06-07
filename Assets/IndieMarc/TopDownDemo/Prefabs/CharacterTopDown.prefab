@@ -100,7 +100,7 @@ GameObject:
   - component: {fileID: 114275663839265892}
   - component: {fileID: 114351677167572512}
   - component: {fileID: 114359742649268298}
-  - component: {fileID: 114902388524385934}
+  - component: {fileID: 8382540016620155009}
   m_Layer: 0
   m_Name: CharacterTopDown
   m_TagString: Player
@@ -281,7 +281,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d8b153895a8d9dd4fa1368f22e63bcf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114902388524385934
+--- !u!114 &8382540016620155009
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -294,6 +294,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   hand: {fileID: 2243565407854503761}
+  UIAmmoCounter: {fileID: 0}
 --- !u!1 &9149784006289267294
 GameObject:
   m_ObjectHideFlags: 0

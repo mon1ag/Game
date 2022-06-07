@@ -19,12 +19,19 @@ public class Weapon : MonoBehaviour, IItemActions
     public float ClipSize = 5;
     public float AttackCost = 1;
     public GameObject DamageDealer;
+    public float Damage = 1;
+    public float AttackSpeed = 1;
+
+    public Animator Animator;
 
     public CharacterHoldItem Hands;
+
+    private bool IsAttack;
     // Start is called before the first frame update
     void Start()
     {
-        
+        Animator = GetComponent<Animator>();
+        Animator.speed = AttackSpeed;
     }
 
     // Update is called once per frame
@@ -33,22 +40,28 @@ public class Weapon : MonoBehaviour, IItemActions
 
     }
 
-    bool TryAttack()
+    void TryAttack()
     {
-        if (CurrentCharges < AttackCost || IsReloading)
-            return false;
-        Attack();
-        return true;
+        if (!IsAttack)
+        {
+            if (CurrentCharges < AttackCost || IsReloading)
+                return;
+
+            Attack();
+        }
     }
 
     void Attack()
     {
-        Debug.Log("Attack");
         if (CurrentCharges >= AttackCost)
         {
-            Instantiate(DamageDealer, DamageParentPoint.position, DamageParentPoint.rotation);
+            IsAttack = true;
+            GameObject DamageObj = Instantiate(DamageDealer, DamageParentPoint.position, DamageParentPoint.rotation);
+            DamageObj.GetComponent<DamageDealer>().Init(this.gameObject, Damage);
             CurrentCharges -= AttackCost;
             Hands.UpdateWeaponUIDelegate.Invoke();
+
+            Animator.SetTrigger("Attack");
         }
         if(CurrentCharges<AttackCost)
         {
@@ -74,5 +87,10 @@ public class Weapon : MonoBehaviour, IItemActions
     void IItemActions.MainAction()
     {
         TryAttack();
+    }
+
+    void AttackEnded()
+    {
+        IsAttack = false;
     }
 }

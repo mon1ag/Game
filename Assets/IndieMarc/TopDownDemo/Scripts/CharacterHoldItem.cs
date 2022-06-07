@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace IndieMarc.TopDown
 {
-    [RequireComponent(typeof(PlayerCharacter))]
     public class CharacterHoldItem : MonoBehaviour
     {
         public Transform hand;
@@ -49,7 +48,7 @@ namespace IndieMarc.TopDown
                 float angle = AngleBetweenPoints(transform.position, lookAtPos);
 
                 //Ta daa
-                held_item[CurrentItem].transform.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
+                hand.rotation = Quaternion.Euler(new Vector3(0f, 0f, angle));
             
 
             float AngleBetweenPoints(Vector2 a, Vector2 b)
